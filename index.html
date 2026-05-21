@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Copetín Ña Nenu | Sabor Casero</title>
+    <link rel="icon" type="image/jpeg" href="logo.jpg">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primario: #FF6B00; 
+            --primario-oscuro: #E65A00;
+            --fondo: #FFFBF0;
+            --oscuro: #2D1400;
+            --blanco: #ffffff;
+            --whatsapp: #25D366;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background: var(--fondo); color: var(--oscuro); scroll-behavior: smooth; overflow-x: hidden; }
+
+        /* --- NAVEGACIÓN PRINCIPAL --- */
+        nav {
+            background: var(--blanco);
+            height: 80px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 5%;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 2000;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .nav-logo { font-weight: 800; color: var(--primario); font-size: 1.6rem; display: flex; align-items: center; gap: 10px; }
+        .nav-logo img { height: 50px; border-radius: 50%; }
+        
+        nav ul { display: flex; list-style: none; gap: 25px; }
+        nav ul li a { text-decoration: none; color: var(--oscuro); font-weight: 600; transition: 0.3s; font-size: 0.9rem; text-transform: uppercase; }
+        nav ul li a:hover { color: var(--primario); }
+
+        /* --- SLIDER --- */
+        .slider-container { margin-top: 80px; width: 100%; height: 60vh; position: relative; overflow: hidden; }
+        .slider { display: flex; width: 400%; height: 100%; transition: transform 0.8s ease-in-out; }
+        .slide { width: 25%; height: 100%; background-size: cover; background-position: center; position: relative; display: flex; justify-content: center; align-items: center; text-align: center; color: white; }
+        .slide::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.4); }
+        .slide-content { position: relative; z-index: 10; padding: 20px; }
+        .slide-content h2 { font-size: 3rem; text-shadow: 2px 4px 10px rgba(0,0,0,0.5); }
+
+        /* --- CATEGORÍAS (TABS) --- */
+        .menu-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            padding: 20px;
+            flex-wrap: wrap;
+            background: var(--fondo);
+            margin-top: 20px;
+        }
+
+        .tab-btn {
+            padding: 12px 25px;
+            border: 2px solid var(--primario);
+            background: transparent;
+            border-radius: 50px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            color: var(--primario);
+        }
+
+        .tab-btn.active {
+            background: var(--primario);
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 107, 0, 0.3);
+        }
+
+        /* --- PRODUCTOS --- */
+        .container { padding: 40px 5%; max-width: 1200px; margin: auto; }
+        .category-content { display: none; animation: fadeIn 0.5s ease; }
+        .category-content.active { display: block; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* Grid configurado para 3 columnas en PC */
+        .grid-menu { 
+            display: grid; 
+            grid-template-columns: repeat(3, 1fr); 
+            gap: 25px; 
+        }
+
+        .card-plato { background: var(--blanco); border-radius: 20px; overflow: hidden; box-shadow: 0 8px 20px rgba(0,0,0,0.06); text-align: center; }
+        .card-plato img { width: 100%; height: 220px; object-fit: cover; transition: 0.3s; }
+        .card-plato:hover img { transform: scale(1.05); }
+        .card-info { padding: 20px; }
+        .precio { display: block; font-size: 1.5rem; color: var(--primario); font-weight: 800; margin: 10px 0; }
+        
+        .btn-pedir {
+            display: block;
+            background: var(--whatsapp);
+            color: white;
+            text-decoration: none;
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: 700;
+            transition: 0.3s;
+        }
+        .btn-pedir:hover { background: #1eb956; transform: translateY(-2px); }
+
+        /* --- SECCIÓN NOSOTROS --- */
+        #nosotros { padding: 60px 5%; text-align: center; }
+        .caja-nosotros { background: white; padding: 40px; border-radius: 30px; border: 2px solid var(--primario); }
+
+        /* --- FOOTER --- */
+        footer { background: var(--oscuro); color: white; padding: 50px; text-align: center; }
+        .whatsapp-fijo { position: fixed; bottom: 25px; right: 25px; background: var(--whatsapp); color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 30px; text-decoration: none; z-index: 3000; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 992px) {
+            .grid-menu { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 768px) {
+            nav ul { display: none; }
+            .slide-content h2 { font-size: 2rem; }
+            .grid-menu { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="nav-logo">
+            <img src="logo.jpg" alt="Logo">
+            <span>ÑA NENU</span>
+        </div>
+        <ul>
+            <li><a href="#inicio">Inicio</a></li>
+            <li><a href="#nosotros">Nosotros</a></li>
+            <li><a href="#menu-digital">Menú</a></li>
+            <li><a href="#contacto">Contacto</a></li>
+        </ul>
+    </nav>
+
+    <div class="slider-container" id="inicio">
+        <div class="slider" id="slider">
+            <div class="slide" style="background-image: url('Empanada.jpg');"><div class="slide-content"><h2>Empanadas Calentitas</h2></div></div>
+            <div class="slide" style="background-image: url('marineraCarne.jpg');"><div class="slide-content"><h2>Marineras Gigantes</h2></div></div>
+            <div class="slide" style="background-image: url('tortilla.jpg');"><div class="slide-content"><h2>Tortillas Caseras</h2></div></div>
+            <div class="slide" style="background-image: url('marinerapollo.jpg');"><div class="slide-content"><h2>Sabor Paraguayo</h2></div></div>
+        </div>
+    </div>
+
+
+<section class="container" id="nosotros">
+        <div style="background: white; padding: 40px; border-radius: 30px; text-align: center; border: 2px solid var(--primario); box-shadow: 0 10px 25px rgba(0,0,0,0.05);">
+            <h2 style="color: var(--primario); margin-bottom: 15px;">Sobre Nosotros</h2>
+            <p style="font-size: 1.1rem; line-height: 1.8; max-width: 900px; margin: 0 auto;">
+                Somos un pequeño negocio familiar dedicado a ofrecer comidas a la minuta hechas con dedicación y sabor casero. Nuestra historia está marcada por el esfuerzo y el cariño de nuestra querida fundadora, la abuela <b>Prudencia Martínez (“Ña Nenu”)</b>, quien mantiene una hermosa trayectoria de más de 15 años de tradición artesanal en la cocina. 
+                <br><br>
+                Desde empanadas bien rellenas hasta sándwiches de milanesa, marineras, tortillas y bebidas bien frías, cada producto es preparado con ingredientes frescos y mucho amor. ¡Gracias por elegirnos y ser parte de esta historia familiar que crece día a día en Villa Elisa!
+            </p>
+        </div>
+    </section>
+
+
+<section class="container" id="mision-vision">
+        <div style="background: white; padding: 40px; border-radius: 30px; border: 2px solid var(--primario); box-shadow: 0 10px 25px rgba(0,0,0,0.05);">
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px;">
+
+                <div style="padding: 30px; background: var(--fondo); border-radius: 20px; border-top: 5px solid var(--primario); text-align: center;">
+                    <div style="font-size: 2.5rem; margin-bottom: 10px;">🎯</div>
+                    <h3 style="color: var(--primario); font-size: 1.6rem; margin-bottom: 15px; font-weight: 800;">Nuestra Misión</h3>
+                    <p style="font-size: 0.95rem; line-height: 1.6;">Ofrecer a nuestros clientes el auténtico sabor tradicional cocinando como en casa y utilizando los mejores ingredientes. Nos dedicamos a preparar diariamente platos deliciosos y abundantes, como nuestras clásicas empanadas, tortillas y marineras, asegurando siempre calidad y frescura para toda la comunidad de Villa Elisa, Paraguay.</p>
+                </div>
+
+                <div style="padding: 30px; background: var(--fondo); border-radius: 20px; border-top: 5px solid var(--primario); text-align: center;">
+                    <div style="font-size: 2.5rem; margin-bottom: 10px;">👁️</div>
+                    <h3 style="color: var(--primario); font-size: 1.6rem; margin-bottom: 15px; font-weight: 800;">Nuestra Visión</h3>
+                    <p style="font-size: 0.95rem; line-height: 1.6;">Ser el copetín de referencia en Villa Elisa y sus alrededores, reconocidos por mantener viva la tradición gastronómica local y por ser siempre la primera opción para quienes buscan un sabor que enamora y porciones hechas para un hambre de verdad.</p>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <section id="menu-digital">
+        <h2 style="text-align: center; font-size: 2.5rem; color: var(--primario);">Nuestro Menú</h2>
+        
+        <div class="menu-tabs">
+            <button class="tab-btn active" onclick="openCategory(event, 'empanadas')"> Empanadas</button>
+            <button class="tab-btn" onclick="openCategory(event, 'marineras')"> Marineras y Tortillas</button>
+            <button class="tab-btn" onclick="openCategory(event, 'tortillas')"> Sándwiches</button>
+        </div>
+
+        <div class="container">
+            <div id="empanadas" class="category-content active">
+                <div class="grid-menu">
+                    <div class="card-plato">
+                        <img src="empandaCarne.webp" alt="Empanada de Carne">
+                        <div class="card-info">
+                            <h3>Carne</h3>
+                            <span class="precio">Gs. 5.000</span>
+                            <a href="https://api.whatsapp.com/send?phone=+595982930527&text=Hola%20Ña%20Nenu!%20Quiero%20Pedir%20Empanada%20de%20Carne" class="btn-pedir" target="_blank">Pedir</a>
+                        </div>
+                    </div>
+                    <div class="card-plato">
+                        <img src="empanadaPollo.jpeg" alt="Empanada de Pollo">
+                        <div class="card-info">
+                            <h3>Pollo</h3>
+                            <span class="precio">Gs. 5.000</span>
+                            <a href="https://api.whatsapp.com/send?phone=+595982930527&text=Hola%20Ña%20Nenu!%20Quiero%20Pedir%20Empanada%20de%20Pollo" class="btn-pedir" target="_blank">Pedir</a>
+                        </div>
+                    </div>
+                    <div class="card-plato">
+                        <img src="empanadaJamon.webp" alt="Empanada Jamón y Queso">
+                        <div class="card-info">
+                            <h3>Jamón y Queso</h3>
+                            <span class="precio">Gs. 5.000</span>
+                            <a href="https://api.whatsapp.com/send?phone=+595982930527&text=Hola%20Ña%20Nenu!%20Quiero%20Pedir%20Empanada%20de%20Jamon%20y%20Queso" class="btn-pedir" target="_blank">Pedir</a>
+                        </div>
+                    </div>
+
+                    <div class="card-plato">
+                        <img src="empanadaNapoli.webp" alt="Empanada Napolitana">
+                        <div class="card-info">
+                            <h3>Napolitana</h3>
+                            <span class="precio">Gs. 5.000</span>
+                            <a href="https://api.whatsapp.com/send?phone=+595982930527&text=Hola%20Ña%20Nenu!%20Quiero%20Pedir%20Empanada%20Napolitana" class="btn-pedir" target="_blank">Pedir</a>
+                        </div>
+                    </div>
+                    <div class="card-plato">
+                        <img src="empanadaChoclo.webp" alt="Empanada de Choclo">
+                        <div class="card-info">
+                            <h3>Choclo</h3>
+                            <span class="precio">Gs. 5.000</span>
+                            <a href="https://api.whatsapp.com/send?phone=+595982930527&text=Hola%20Ña%20Nenu!%20Quiero%20Pedir%20Empanada%20de%20Choclo" class="btn-pedir" target="_blank">Pedir</a>
+                        </div>
+                    </div>
+                    <div class="card-plato">
+                        <img src="empanadaMandioca.jpeg" alt="Empanada de Mandioca">
+                        <div class="card-info">
+                            <h3>Mandioca</h3>
+                            <span class="precio">Gs. 5.000</span>
+                            <a href="https://api.whatsapp.com/send?phone=+595982930527&text=Hola%20Ña%20Nenu!%20Quiero%20Pedir%20Empanada%20de%20Mandioca" class="btn-pedir" target="_blank">Pedir</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="marineras" class="category-content">
+                <div class="grid-menu">
+                    <div class="card-plato">
+                        <img src="marineraCarne.jpg" alt="Marinera de Carne">
+                        <div class="card-info">
+                            <h3>Marinera de Carne</h3>
+                            <span class="precio">Gs. 10.000</span>
+                            <a href="https://api.whatsapp.com/send?phone=+595982930527&text=Hola%20Ña%20Nenu!%20Quiero%20Pedir%20Marinera%20de%20Carne" class="btn-pedir" target="_blank">Pedir</a>
+                        </div>
+                    </div>
+
+		    <div class="card-plato">
+                        <img src="marinerapollo.jpg" alt="Marinera de Pollo">
+                        <div class="card-info">
+                            <h3>Marinera de Pollo</h3>
+                            <span class="precio">Gs. 8.000</span>
+                            <a href="https://api.whatsapp.com/send?phone=+595982930527&text=Hola%20Ña%20Nenu!%20Quiero%20Pedir%20Marinera%20de%20Pollo" class="btn-pedir" target="_blank">Pedir</a>
+                        </div>
+                    </div>
+
+		    <div class="card-plato">
+                        <img src="tortilla.jpg" alt="Tortilla">
+                        <div class="card-info">
+                            <h3>Tortilla</h3>
+                            <span class="precio">Gs. 5.000</span>
+                            <a href="https://api.whatsapp.com/send?phone=+595982930527&text=Hola%20Ña%20Nenu!%20Quiero%20Pedir%20Tortilla" class="btn-pedir" target="_blank">Pedir</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div id="tortillas" class="category-content">
+                <div class="grid-menu">
+                    <div class="card-plato">
+                        <img src="publicacionSandwich.jpeg" alt="sandwicheDeCarne">
+                        <div class="card-info">
+                            <h3>Milanesa de Carne</h3>
+                            <span class="precio">Gs. 8.000</span>
+                            <a href="https://api.whatsapp.com/send?phone=+595982930527&text=Hola%20Ña%20Nenu!%20Quiero%20Pedir%20Sándwich%20de%20Milanesa%20de%20Carne" class="btn-pedir" target="_blank">Pedir</a>
+                        </div>
+                    </div>
+
+		    <div class="card-plato">
+                        <img src="sandwichePollo.png" alt="sandwicheDePollo">
+                        <div class="card-info">
+                            <h3>Milanesa de Pollo</h3>
+                            <span class="precio">Gs. 8.000</span>
+                            <a href="https://api.whatsapp.com/send?phone=+595982930527&text=Hola%20Ña%20Nenu!%20Quiero%20Pedir%20Sándwich%20de%20Milanesa%20de%20Pollo" class="btn-pedir" target="_blank">Pedir</a>
+                        </div>
+                    </div>
+
+		    <div class="card-plato">
+                        <img src="sandwicheVerdura.webp" alt="sandwicheDeVerdura">
+                        <div class="card-info">
+                            <h3>Verdura</h3>
+                            <span class="precio">Gs. 5.000</span>
+                            <a href="https://api.whatsapp.com/send?phone=+595982930527&text=Hola%20Ña%20Nenu!%20Quiero%20Pedir%20Sándwich%20de%20Verdura" class="btn-pedir" target="_blank">Pedir</a>
+                        </div>
+                    </div>
+
+		    <div class="card-plato">
+                        <img src="sandwicheJamon.png" alt="sandwicheDeJamon">
+                        <div class="card-info">
+                            <h3>Jamón y Queso</h3>
+                            <span class="precio">Gs. 5.000</span>
+                            <a href="https://api.whatsapp.com/send?phone=+595982930527&text=Hola%20Ña%20Nenu!%20Quiero%20Pedir%20Sándwich%20de%20Jámon%20y%20Queso" class="btn-pedir" target="_blank">Pedir</a>
+                        </div>
+                    </div>
+
+
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+<footer id="contacto">
+        <div class="footer-info">
+            <h2>Copetín Ña Nenu</h2>
+            <p>📍 Ubicación: Villa Elisa, Paraguay</p>
+            <p>🕐 Horario: Lun a Sáb - 07:00 a 14:00 hs</p>
+
+            <p style="margin-top: 15px;">
+                <a href="https://instagram.com/copetin_nenu28" target="_blank" style="color: var(--primario); text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 5px;">
+                    📸 Síguenos en Instagram
+                </a>
+            </p>
+        </div>
+
+        <p style="opacity: 0.5; margin-top: 25px;">&copy; 2026 Copetín Ña Nenu - Todos los derechos reservados.</p>
+    </footer>
+
+    <a href="https://api.whatsapp.com/send?phone=+595982930527&text=Hola%20%C3%91a%20Nenu!" class="whatsapp-fijo" target="_blank">📲</a>
+
+    <script>
+        // Lógica del Slider
+        const slider = document.getElementById('slider');
+        let index = 0;
+        setInterval(() => {
+            index++;
+            if (index > 3) index = 0;
+            slider.style.transform = `translateX(-${index * 25}%)`;
+        }, 4000);
+
+        // Lógica de Categorías
+        function openCategory(evt, categoryName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("category-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].classList.remove("active");
+            }
+            tablinks = document.getElementsByClassName("tab-btn");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].classList.remove("active");
+            }
+            document.getElementById(categoryName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+    </script>
+</body>
+</html>
